@@ -6,10 +6,14 @@ public class RayInfo {
 	public Vector2 start;
 	public Vector2 end;
 	public Vector2 hit;
-	public float distanceToHit =0;
+	public float distanceToHit = 0;
 	public Vector2 rayDir;
 	public float dirLen2;
-	
+
+	public RayInfo() {
+		hit = new Vector2();
+	}
+
 	public void calculateHit(float dst) {
 		hit.set(rayDir.mul(dst).add(start));
 	}

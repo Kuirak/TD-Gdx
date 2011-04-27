@@ -1,5 +1,6 @@
 package com.drako.tdgdx.helper;
 
+import com.badlogic.gdx.graphics.GL10;
 import com.badlogic.gdx.graphics.Mesh;
 import com.badlogic.gdx.graphics.VertexAttribute;
 import com.badlogic.gdx.graphics.VertexAttributes.Usage;
@@ -9,6 +10,7 @@ public class MeshObject {
 	private Mesh mesh;
 	private float width,length,height;
 	private Vector2 position;
+	private float radius;
 	
 	
 	public MeshObject(float x, float y,float width,float length){
@@ -19,6 +21,7 @@ public class MeshObject {
 		
 	}	
 	public MeshObject(float x, float y,float width,float length,float height){
+		this.setRadius(width*1.01f);
 		mesh = new Mesh(false, 8, 14, new VertexAttribute(Usage.Position,3,"a_position"));
 		mesh = generateBlock(mesh,width,length,height);
 		this.position = new Vector2(x, y);
@@ -45,6 +48,12 @@ public class MeshObject {
 		} else
 			return false;
 
+	}
+	public void render(GL10 gl){
+		gl.glPushMatrix();
+		gl.glTranslatef(position.x,position.y, -50);
+		mesh.render(GL10.GL_TRIANGLE_STRIP);
+		gl.glPopMatrix();
 	}
 
 	private Mesh generateRect(Mesh mesh, float width, float length) {
@@ -98,6 +107,12 @@ public class MeshObject {
 
 	public Vector2 getPosition() {
 		return position;
+	}
+	public void setRadius(float radius) {
+		this.radius = radius;
+	}
+	public float getRadius() {
+		return radius;
 	}
 	
 }
