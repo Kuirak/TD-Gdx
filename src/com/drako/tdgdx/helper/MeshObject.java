@@ -10,6 +10,7 @@ public class MeshObject {
 	private float width,length,height;
 	private Vector2 position;
 	
+	
 	public MeshObject(float x, float y,float width,float length){
 		mesh = new Mesh(false, 4, 0, new VertexAttribute(Usage.Position,2,"a_position"));
 		mesh = generateRect(mesh,width,length);
