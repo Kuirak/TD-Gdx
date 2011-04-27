@@ -14,22 +14,23 @@ public class WayPoint {
 	public Vector2 target;
 	private ArrayList<WayPoint> possibleNextWaypoints;
 	private boolean isHitPoint;
-	
+
 	public static final int ALTERNATIVE_WAYS = 2;
 	private static final float MAX_RAY_LENGTH = 100;
 	// PlaceHolder:
-	private ArrayList<Vector2> dirs ;
-	private float stepLength = 5;
+	private ArrayList<Vector2> dirs;
+	private float stepLength = 10;
 	private RayInfo ri;
-	
+	private boolean hasCollided = false;
 
-	public WayPoint(Vector2 position, Vector2 target,
-			boolean isHitPoint) {
+	public WayPoint(Vector2 position, Vector2 target, boolean isHitPoint) {
 		this.position = position;
-		this.target  = target;
+		this.target = target;
 		this.isHitPoint = isHitPoint;
 		ri = new RayInfo();
 		dirs = new ArrayList<Vector2>();
+		possibleNextWaypoints = new ArrayList<WayPoint>();
+		Gdx.app.log("WayPoint", "init!");
 	}
 
 	public boolean CalculateNextPossibleWayPoints() {
@@ -39,19 +40,20 @@ public class WayPoint {
 			return doForwardStep();
 		} else {
 			Gdx.app.log("calcNextWp", "doSideStep");
-			dirs.add(new Vector2(0,1));
-			dirs.add(new Vector2(0,-1));
+			dirs.add(new Vector2(0, 1));
+			dirs.add(new Vector2(0, -1));
 			return doSideSteps(dirs);
 		}
 
 	}
-	//Is called when  not Hitpoint
+
+	// Is called when not Hitpoint
 	private boolean doForwardStep() {
 		// Ray from this Waypoint to target returns the Vector2 of the nearest
 		// intersection
 		Vector2 hit = CastRay(this.position, target);
 		// if the ray hits the target without intersection - target reached!
-		if (hit == target) {
+		if (hasCollided == false) {
 			Gdx.app.log("HitTarget?", "YES");
 			return true;
 		}
@@ -67,9 +69,11 @@ public class WayPoint {
 		Gdx.app.log("HitTarget?", "NO");
 		return false;
 	}
-	//Is called when isHitpoint
+
+	// Is called when isHitpoint
 	// gets a list with the Vectors in which direction to do the sidesteps
 	private boolean doSideSteps(ArrayList<Vector2> dirs) {
+		Gdx.app.log("doSideSteps", "started");
 
 		for (Vector2 dir : dirs) {
 			Vector2 hit = CastRay(this.position,
@@ -79,13 +83,17 @@ public class WayPoint {
 		// starts at the waypoint incrementing towards SideRayhitpoint
 		float currentStep = 0;
 		int numberOfWays = 0;
-		while (currentStep < ri.distanceToHit) {
+		Gdx.app.log("doSidesteps", ri.distanceToHit + "," + currentStep);
+		int i = 0;
+		while (i > 10) {
+			i++;
 			currentStep += stepLength;
-
+			Gdx.app.log("doSideSteps", "In while");
 			for (Vector2 dir : dirs) {
 
 				if (doOneSideStep(dir, currentStep)) {
 					numberOfWays++;
+					Gdx.app.log("doSideSteps", "Found a way");
 					if (numberOfWays >= ALTERNATIVE_WAYS) {
 						return true;
 					}
@@ -103,32 +111,39 @@ public class WayPoint {
 	}
 
 	private boolean doOneSideStep(Vector2 dir, float currentStep) {
-		WayPoint wp = new WayPoint(this.position.add(dir.mul(currentStep)), this.target, false);
+		WayPoint wp = new WayPoint(this.position.add(dir.mul(currentStep)),
+				this.target, false);
 		if (wp.CalculateNextPossibleWayPoints()) {
 			this.possibleNextWaypoints.add(wp);
+			Gdx.app.log("doSideStep - nextWaypoint?", "YES!");
 			return true;
 		}
+		Gdx.app.log("doSideStep - nextWaypoint?", "NO!");
 		return false;
 
 	}
 
 	private Vector2 CastRay(Vector2 start, Vector2 end) {
-		ri.start =start;
+		Gdx.app.log("CastRay", "start");
+		ri.start = start;
 		ri.end = end;
-		float oldDst =MAX_RAY_LENGTH; 
+		float oldDst = MAX_RAY_LENGTH;
 		ri.calculateDir();
-		//TODO iterate over collidable objects 
+		hasCollided = false;
+		// TODO iterate over collidable objects
 		for (MeshObject mesh : CollisionHelper.collidable) {
-			if (oldDst > ri.distanceToHit && RayCastHelper.IntersectLineCircle(mesh.getPosition(), mesh.getRadius(), ri)){
+			Gdx.app.log("CastRay", "start iterating");
+			if (oldDst > ri.distanceToHit
+					&& RayCastHelper.IntersectLineCircle(mesh.getPosition(),
+							mesh.getRadius(), ri)) {
 				oldDst = ri.distanceToHit;
 				Gdx.app.log("CastRay", "Collision!");
+				hasCollided = true;
 			}
-			
+
 		}
 		ri.calculateHit(ri.distanceToHit);
 		return ri.hit;
 	}
-
-	
 
 }

@@ -18,7 +18,7 @@ public class RayCastHelper {
 		float b2ac = b * b + a * c;
 		// Negative doesn't have square root.
 		if ((b2ac) <= 0) {
-			
+			 
 			return false;
 		}
 		float diva = 1.0F / a;

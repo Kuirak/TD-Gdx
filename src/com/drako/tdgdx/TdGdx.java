@@ -17,7 +17,7 @@ public class TdGdx implements ApplicationListener {
 	private Vector2 spawn;
 	private Vector2 target;
 	private WayPoint wp;
-	float rotate;
+	
 	@Override
 	public void create() {
 		Gdx.app.log("Create", "Start Init");
@@ -25,8 +25,8 @@ public class TdGdx implements ApplicationListener {
 		meshObj = new MeshObject(0, 0, 10, 10,10);
 		CollisionHelper.collidable.add(meshObj);
 		spawn= new Vector2(-100,0);
-		target = new Vector2(100, 5);
-		rotate =0;
+		target = new Vector2(100, 0);
+		
 		gl = Gdx.graphics.getGL10();
 		Gdx.app.log("Create", "Finished Init");
 	}
@@ -51,7 +51,7 @@ public class TdGdx implements ApplicationListener {
 		
 		meshObj.render(gl);
 		
-		rotate++;
+		
 		
 		
 	}
