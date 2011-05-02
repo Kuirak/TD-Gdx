@@ -8,7 +8,8 @@ public class RayCastHelper {
 	//requires a rayinfo with precalculated dir;
 	public static boolean IntersectLineCircle(Vector2 circleCenter, float r,RayInfo ri) {
 		
-		Vector2 vOrginNew = circleCenter.sub(ri.start);
+		Vector2 vOrginNew = new Vector2(circleCenter);
+		vOrginNew.sub(ri.start);
 		
 		
 		

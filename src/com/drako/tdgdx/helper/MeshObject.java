@@ -17,7 +17,10 @@ public class MeshObject {
 		mesh = new Mesh(false, 4, 0, new VertexAttribute(Usage.Position,2,"a_position"));
 		mesh = generateRect(mesh,width,length);
 		this.position = new Vector2(x, y);
-		this.setRadius(width*1.01f);
+		this.radius = width;
+		this.width = width;
+		this.length = length;
+		
 			
 		
 	}	
@@ -26,7 +29,10 @@ public class MeshObject {
 		mesh = new Mesh(false, 8, 14, new VertexAttribute(Usage.Position,3,"a_position"));
 		mesh = generateBlock(mesh,width,length,height);
 		this.position = new Vector2(x, y);
-			
+		this.radius = width;
+		this.width = width;
+		this.length = length;
+		this.height = height;
 		
 	}
 	

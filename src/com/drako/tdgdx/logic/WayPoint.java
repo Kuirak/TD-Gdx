@@ -3,11 +3,14 @@ package com.drako.tdgdx.logic;
 import java.util.ArrayList;
 
 import com.badlogic.gdx.Gdx;
+import com.badlogic.gdx.graphics.GL10;
+import com.badlogic.gdx.graphics.glutils.ImmediateModeRenderer;
 import com.badlogic.gdx.math.Vector2;
+import com.drako.tdgdx.helper.CollisionHelper;
 import com.drako.tdgdx.helper.MeshObject;
 import com.drako.tdgdx.helper.RayCastHelper;
 import com.drako.tdgdx.helper.RayInfo;
-import com.drako.tdgdx.helper.CollisionHelper;
+import com.drako.tdgdx.helper.VisualDebugHelper;
 
 public class WayPoint {
 	public Vector2 position;
@@ -22,16 +25,25 @@ public class WayPoint {
 	private float stepLength = 10;
 	private RayInfo ri;
 	private boolean hasCollided = false;
+	//debugging
+	boolean debug = true;
+	
+	
 
 	public WayPoint(Vector2 position, Vector2 target, boolean isHitPoint) {
+		
 		this.position = position;
 		this.target = target;
 		this.isHitPoint = isHitPoint;
 		ri = new RayInfo();
 		dirs = new ArrayList<Vector2>();
 		possibleNextWaypoints = new ArrayList<WayPoint>();
+		if(debug){
+			VisualDebugHelper.addPoint(position);
+		}
 		Gdx.app.log("WayPoint", "init!");
 	}
+
 
 	public boolean CalculateNextPossibleWayPoints() {
 
@@ -85,7 +97,7 @@ public class WayPoint {
 		int numberOfWays = 0;
 		Gdx.app.log("doSidesteps", ri.distanceToHit + "," + currentStep);
 		int i = 0;
-		while (i > 10) {
+		while (i > 100) {
 			i++;
 			currentStep += stepLength;
 			Gdx.app.log("doSideSteps", "In while");
@@ -115,30 +127,31 @@ public class WayPoint {
 				this.target, false);
 		if (wp.CalculateNextPossibleWayPoints()) {
 			this.possibleNextWaypoints.add(wp);
-			Gdx.app.log("doSideStep - nextWaypoint?", "YES!");
+			Gdx.app.log("doOneSideStep - nextWaypoint?", "YES!");
 			return true;
 		}
-		Gdx.app.log("doSideStep - nextWaypoint?", "NO!");
+		Gdx.app.log("doOneSideStep - nextWaypoint?", "NO!");
 		return false;
 
 	}
 
 	private Vector2 CastRay(Vector2 start, Vector2 end) {
 		Gdx.app.log("CastRay", "start");
-		ri.start = start;
-		ri.end = end;
+		ri.start= new Vector2(start);
+		ri.end = new Vector2(end);
 		float oldDst = MAX_RAY_LENGTH;
 		ri.calculateDir();
 		hasCollided = false;
-		// TODO iterate over collidable objects
+		//  iterate over collidable objects
 		for (MeshObject mesh : CollisionHelper.collidable) {
+			
 			Gdx.app.log("CastRay", "start iterating");
 			if (oldDst > ri.distanceToHit
 					&& RayCastHelper.IntersectLineCircle(mesh.getPosition(),
 							mesh.getRadius(), ri)) {
 				oldDst = ri.distanceToHit;
-				Gdx.app.log("CastRay", "Collision!");
 				hasCollided = true;
+				Gdx.app.log("CastRay", "Collision!");
 			}
 
 		}
