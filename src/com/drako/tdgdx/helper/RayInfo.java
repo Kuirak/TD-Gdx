@@ -18,7 +18,7 @@ public class RayInfo {
 
 	public void calculateHit(float dst) {
 		hit = new Vector2();
-		hit.set(rayDir.add(start).mul(dst));
+		hit.set(rayDir.mul(dst));
 		if(debug){
 			VisualDebugHelper.addPoint(hit);
 		}

@@ -37,11 +37,12 @@ public class TdGdx implements ApplicationListener {
 		meshObj2 = new MeshObject(10, 20, 10, 10,10);
 		CollisionHelper.collidable.add(meshObj);
 		CollisionHelper.collidable.add(meshObj2);
-		spawn= new Vector2(-100,5);
-		target = new Vector2(100, -5);
+		spawn= new Vector2(-50,5);
+		target = new Vector2(50, -5);
 		font = new BitmapFont(Gdx.files.internal("data/fontarial.fnt"), Gdx.files.internal("data/fontarial.png"), false);
 		gl = Gdx.graphics.getGL10();
 		batch = new SpriteBatch();
+		
 		Gdx.app.log("Create", "Finished Init");
 	}
 
@@ -56,10 +57,10 @@ public class TdGdx implements ApplicationListener {
 		
 		gl.glClear(GL10.GL_COLOR_BUFFER_BIT);
 		//uncomment for 3D
-//		cam.update();
-//		cam.apply(gl);
-		camera.update();
-		camera.apply(gl);
+		cam.update();
+		cam.apply(gl);
+//		camera.update();
+//		camera.apply(gl);
 		batch.setProjectionMatrix(camera.combined);
 		batch.setTransformMatrix(camera.view);
 		
@@ -71,6 +72,7 @@ public class TdGdx implements ApplicationListener {
 		if(debug){
 			
 			VisualDebugHelper.drawPoints(gl);
+			VisualDebugHelper.drawLines(gl);
 		}
 		
 		meshObj.render(gl);

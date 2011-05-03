@@ -40,6 +40,7 @@ public class WayPoint {
 		possibleNextWaypoints = new ArrayList<WayPoint>();
 		if(debug){
 			VisualDebugHelper.addPoint(position);
+			VisualDebugHelper.addPoint(target);
 		}
 		Gdx.app.log("WayPoint", "init!");
 	}
@@ -89,7 +90,7 @@ public class WayPoint {
 
 		for (Vector2 dir : dirs) {
 			Vector2 hit = CastRay(this.position,
-					this.position.add(dir.mul(MAX_RAY_LENGTH)));
+					this.position.add(dir));
 		}
 
 		// starts at the waypoint incrementing towards SideRayhitpoint
@@ -156,6 +157,9 @@ public class WayPoint {
 
 		}
 		ri.calculateHit(ri.distanceToHit);
+		if(debug){
+			VisualDebugHelper.addLine(start, ri.hit);
+		}
 		return ri.hit;
 	}
 
