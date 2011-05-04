@@ -7,6 +7,7 @@ import com.badlogic.gdx.graphics.VertexAttributes.Usage;
 import com.badlogic.gdx.math.Vector2;
 
 public class MeshObject {
+	public static int meshObjCount =0;
 	private Mesh mesh;
 	private float width,length,height;
 	private Vector2 position;
@@ -20,6 +21,7 @@ public class MeshObject {
 		this.radius = width;
 		this.width = width;
 		this.length = length;
+		meshObjCount++;
 		
 			
 		
@@ -33,6 +35,7 @@ public class MeshObject {
 		this.width = width;
 		this.length = length;
 		this.height = height;
+		meshObjCount++;
 		
 	}
 	
@@ -120,6 +123,12 @@ public class MeshObject {
 	}
 	public float getRadius() {
 		return radius;
+	}
+	
+	@Override
+	public String toString(){
+		return "MeshObject number: "+meshObjCount;
+		
 	}
 	
 }

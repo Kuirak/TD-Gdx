@@ -87,11 +87,11 @@ public class WayPoint {
 	// gets a list with the Vectors in which direction to do the sidesteps
 	private boolean doSideSteps(ArrayList<Vector2> dirs) {
 		Gdx.app.log("doSideSteps", "started");
-
-		for (Vector2 dir : dirs) {
-			Vector2 hit = CastRay(this.position,
-					this.position.add(dir));
-		}
+//TODO  don not  for what i need it  but it was planned
+//		for (Vector2 dir : dirs) {
+//			Vector2 hit = CastRay(this.position,
+//					this.position.add(dir));
+//		}
 
 		// starts at the waypoint incrementing towards SideRayhitpoint
 		float currentStep = 0;
@@ -152,7 +152,7 @@ public class WayPoint {
 							mesh.getRadius(), ri)) {
 				oldDst = ri.distanceToHit;
 				hasCollided = true;
-				Gdx.app.log("CastRay", "Collision!");
+				Gdx.app.log("CastRay", "Collision!"+mesh);
 			}
 
 		}
